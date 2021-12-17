@@ -7,8 +7,8 @@ namespace DSM
 {
     public class DiscordController
     {
-		public bool Connected { get => client.IsDisposed == false && client != null; }
 		public RichPresence Presence { get => presence; }
+		public bool Connected { get; private set; }
 
 		public Action<string> OnLogging;
 
@@ -51,6 +51,7 @@ namespace DSM
 
 		private void OnClientReady(object sender, ReadyMessage args)
 		{
+			Connected = true;
 			OnLogging?.Invoke($"Client ready {args.User.Username}");
 		}
 
@@ -65,6 +66,7 @@ namespace DSM
 		}
 		private void OnClientClose(object sender, CloseMessage args)
 		{
+			Connected = false;
 			OnLogging?.Invoke($"Client closed (Reason: {args.Reason})");
 		}
 
